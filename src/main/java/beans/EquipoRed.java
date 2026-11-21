@@ -10,6 +10,7 @@ public class EquipoRed {
     private String estado;
     private Date fecha_alta;
     private int idSede;
+    private int mesesOperativos;
 
     public EquipoRed() {
     }
@@ -22,6 +23,14 @@ public class EquipoRed {
         this.estado = estado;
         this.fecha_alta = fecha_alta;
         this.idSede = idSede;
+    }
+
+    public int getMesesOperativos() {
+        return mesesOperativos;
+    }
+
+    public void setMesesOperativos(int mesesOperativos) {
+        this.mesesOperativos = mesesOperativos;
     }
 
     public int getIdEquipo() {
