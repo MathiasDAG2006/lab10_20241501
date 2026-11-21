@@ -2,11 +2,10 @@ package Daos;
 
 import beans.EquipoRed;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class EquipoDao extends DaoBase {
 
@@ -16,7 +15,7 @@ public class EquipoDao extends DaoBase {
         String sql = """
                      SELECT e.id_equipo, e.hostname, e.tipo, e.ip_gestion, e.estado, s.nombre
                      FROM equipos_red e
-                     JOIN sedes s ON e.id_sede = s.id_sede
+                     JOIN sedes s ON e.id_sede = s.id_sede;
                      """;
 
         try (Connection conn = getConnection();
@@ -41,7 +40,26 @@ public class EquipoDao extends DaoBase {
         return listaEquipoRed;
     }
 
-    public void creacionEquipo() {
+    public void creacionEquipo(EquipoRed equipoRed) {
+        String sql = """
+                INSERT INTO equipos_red (hostname, tipo, ip_gestion, estado, fecha_alta, id_sede)
+                VALUES (?, ?, ?, ?, ?, ?);
+                """;
 
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, equipoRed.getHostname());
+            pstmt.setString(2, equipoRed.getTipo());
+            pstmt.setString(3, equipoRed.getIp_gestion());
+            pstmt.setString(4, equipoRed.getEstado());
+            pstmt.setDate(5, (Date) equipoRed.getFecha_alta());
+            pstmt.setInt(6, equipoRed.getIdSede());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
